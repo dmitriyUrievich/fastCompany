@@ -12,7 +12,7 @@ const Bookmark = ({ status, _id, onToggle }) => {
 
 Bookmark.propTypes = {
   status: PropTypes.bool.isRequired,
-  _id: PropTypes.number.isRequired,
+  _id: PropTypes.string.isRequired,
   onToggle: PropTypes.func.isRequired
 }
 export default Bookmark
