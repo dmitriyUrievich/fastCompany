@@ -7,6 +7,7 @@ import SearchStatus from './searchStatus'
 import UsersTable from './usersTable'
 import _ from 'lodash'
 import api from '../api/index'
+
 const Users = () => {
   const pageSize = 6
   const [currentPage, setCurrentPage] = useState(1)
@@ -72,45 +73,47 @@ const Users = () => {
 
     const clearFilter = () => setSelecredProf()
     return (
-      <div className="d-flex">
-        {professions&& (
-          <div className="d-flex flex-column flex-shrink-0 p-3">
-            <GroupList items={professions}
-              selectedItem={selecredProf}
-              onItemSelect={handleProfessionSelect}
-            />
-            <button className='btn btn-primary mt-2' onClick={clearFilter}>Очистить</button>
-          </div>)}
+      <>
+        <div className="d-flex">
+          {professions&& (
+            <div className="d-flex flex-column flex-shrink-0 p-3">
+              <GroupList items={professions}
+                selectedItem={selecredProf}
+                onItemSelect={handleProfessionSelect}
+              />
+              <button className='btn btn-primary mt-2' onClick={clearFilter}>Очистить</button>
+            </div>)}
 
-        {count > 0 && (
-          <div className="d-flex flex-column">
-            <div className="w-10 bd-highlight">
-              <SearchStatus number={count} />
-            </div>
-            {count > 0 && (
-              <UsersTable
-                users={userCrop}
-                onSort={handleSort}
-                selectedSort={sortBy}
-                onDelete={handlerDelete}
-                onToggleBookMark={toggleStatus}
-              />)}
-            <div className="d-flex justify-content-center">
-              <Pagination
-                itemCount={count}
-                pageSize={pageSize}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-              /> </div>
-          </div>)}
-      </div>
+          {count > 0 && (
+            <div className="d-flex flex-column">
+              <div className="w-10 bd-highlight">
+                <SearchStatus number={count} />
+              </div>
+              {count > 0 && (
+                <UsersTable
+                  users={userCrop}
+                  onSort={handleSort}
+                  selectedSort={sortBy}
+                  onDelete={handlerDelete}
+                  onToggleBookMark={toggleStatus}
+                />)}
+              <div className="d-flex justify-content-center">
+                <Pagination
+                  itemCount={count}
+                  pageSize={pageSize}
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                /> </div>
+            </div>)}
+        </div>
+      </>
     )
   }
-  return 'Loading...'
+  return <h2>Loading...</h2>
 }
 
 Users.propTypes = {
-  users: PropTypes.array.isRequired
+  users: PropTypes.array
 }
 
 export default Users
