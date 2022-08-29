@@ -1,5 +1,5 @@
 import React from 'react'
-import Users from './users'
+import Users from './layout/users'
 import { useParams } from 'react-router-dom'
 import UserPage from './userPage'
 

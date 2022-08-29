@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Pagination from './pagination'
-import paginate from '../utils/paginate'
+import Pagination from '../pagination'
+import paginate from '../../utils/paginate'
 import PropTypes from 'prop-types'
-import GroupList from './groupList'
-import SearchStatus from './searchStatus'
-import UsersTable from './usersTable'
+import GroupList from '../groupList'
+import SearchStatus from '../searchStatus'
+import UsersTable from '../usersTable'
 import _ from 'lodash'
-import api from '../api/index'
+import api from '../../api'
 
 const Users = () => {
   const pageSize = 6
@@ -14,6 +14,7 @@ const Users = () => {
   const [professions, setProfessions] = useState()
   const [selecredProf, setSelecredProf] = useState()
   const [users, setUsers] = useState()
+  const [searchUser, setSearchUser] = useState('')
   const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' })
   useEffect(() => {
     api.professions.fetchAll()
@@ -29,6 +30,12 @@ const Users = () => {
   const handlerDelete = (id) => {
     setUsers((prevState) => prevState.filter((user) => user._id !== id))
   }
+  // const clearFilterUser = () => {
+  //   setSearchUser()
+  // }
+  const handleSeachUsers = ({ target }) => {
+    setSearchUser(target.value)
+  }
 
   const toggleStatus = (id) => {
     setUsers(
@@ -41,6 +48,10 @@ const Users = () => {
     )
   }
 
+  // const handleValue = ()=>{
+  //
+  // }
+  //
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex)
   }
@@ -57,6 +68,11 @@ const Users = () => {
         (user) =>
           JSON.stringify(user.profession) === JSON.stringify(selecredProf)
       )
+    } else if (searchUser) {
+      filtredUsers = users.filter((user) => {
+        const searchRegExp = new RegExp(`${searchUser}`)
+        return user.name.search(searchRegExp) !== -1
+      })
     } else {
       filtredUsers = users
     }
@@ -88,6 +104,16 @@ const Users = () => {
             <div className="d-flex flex-column">
               <div className="w-10 bd-highlight">
                 <SearchStatus number={count} />
+              </div>
+
+              <div className="input-group mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search..."
+                  onChange={handleSeachUsers}
+                  onClick={clearFilter}
+                  value={searchUser}/>
               </div>
               {count > 0 && (
                 <UsersTable
