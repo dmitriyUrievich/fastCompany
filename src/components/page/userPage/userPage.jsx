@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import QualitiesList from './qualitiesList'
-import API from '../api'
+import QualitiesList from '../../qualities/qualitiesList'
+import API from '../../../api'
 import _ from 'lodash'
 
 const UserPage =({ userId }) => {
