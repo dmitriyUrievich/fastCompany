@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import Pagination from '../pagination'
-import paginate from '../../utils/paginate'
+import Pagination from '../../pagination'
+import paginate from '../../../utils/paginate'
 import PropTypes from 'prop-types'
-import GroupList from '../groupList'
-import SearchStatus from '../searchStatus'
-import UsersTable from '../usersTable'
+import GroupList from '../../commons/groupList'
+import SearchStatus from '../../ui/searchStatus'
+import UsersTable from '../../ui/usersTable'
 import _ from 'lodash'
-import api from '../../api'
+import api from '../../../api'
 
-const Users = () => {
+const UsersListPage = () => {
   const pageSize = 6
   const [currentPage, setCurrentPage] = useState(1)
   const [professions, setProfessions] = useState()
@@ -22,7 +22,7 @@ const Users = () => {
   }, [])
   useEffect(() => {
     setCurrentPage(1)
-  }, [selecredProf])
+  }, [selecredProf, searchUser])
   useEffect(() => {
     api.users.fetchAll().then((data) => setUsers(data))
   }, [])
@@ -30,10 +30,9 @@ const Users = () => {
   const handlerDelete = (id) => {
     setUsers((prevState) => prevState.filter((user) => user._id !== id))
   }
-  // const clearFilterUser = () => {
-  //   setSearchUser()
-  // }
+
   const handleSeachUsers = ({ target }) => {
+    setSelecredProf(undefined)
     setSearchUser(target.value)
   }
 
@@ -47,35 +46,29 @@ const Users = () => {
       })
     )
   }
-
-  // const handleValue = ()=>{
-  //
-  // }
-  //
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex)
   }
   const handleProfessionSelect = item => {
+    if (searchUser!=='') setSearchUser('')
     setSelecredProf(item)
   }
   const handleSort = (item) => {
     setSortBy(item)
   }
+
   if (users) {
-    let filtredUsers = null
-    if (selecredProf) {
-      filtredUsers = users.filter(
+    const filtredUsers = searchUser
+      ? users.filter(
         (user) =>
-          JSON.stringify(user.profession) === JSON.stringify(selecredProf)
+          user.name.toLowerCase().indexOf(searchUser.toLowerCase())!==-1
       )
-    } else if (searchUser) {
-      filtredUsers = users.filter((user) => {
-        const searchRegExp = new RegExp(`${searchUser}`)
-        return user.name.search(searchRegExp) !== -1
-      })
-    } else {
-      filtredUsers = users
-    }
+      :selecredProf
+        ? users.filter(
+          (user) =>
+            JSON.stringify(user.profession) === JSON.stringify(selecredProf)
+        )
+        :users
 
     const count = filtredUsers.length
 
@@ -138,8 +131,8 @@ const Users = () => {
   return <h2>Loading...</h2>
 }
 
-Users.propTypes = {
+UsersListPage.propTypes = {
   users: PropTypes.array
 }
 
-export default Users
+export default UsersListPage

@@ -13,6 +13,7 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
+    // 'object-shorthand': ['error', 'newer',],
     'react/prop-types': 0,
     'space-infix-ops': 0,
     indent: ['error', 2],
