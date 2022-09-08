@@ -5,7 +5,6 @@ const SelectFild = ({ label, value, onChange, defaultOptions, options, name, err
   const getInputClasses = () => {
     return 'form-select' + (error ? ' is-invalid' : '')
   }
-
   const handleChange = ({ target }) => {
     onChange({ name: target.name, value: target.value })
   }
@@ -13,6 +12,7 @@ const SelectFild = ({ label, value, onChange, defaultOptions, options, name, err
   const optionsArray = !Array.isArray(options) && typeof (options)==='object'
     ?Object.keys(options).map(optionName => ({ name: options[optionName].name, value: options[optionName]._id }))
     :options
+
   return (
     <div className="mb-4">
       <label htmlFor={name} className="form-label">{label}</label>

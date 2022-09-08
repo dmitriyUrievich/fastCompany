@@ -6,6 +6,6 @@ import UserPage from '../page/userPage'
 const Users =() => {
   const { userId } = useParams()
 
-  return userId?<UserPage/>:<UsersListPage/>
+  return userId?<UserPage userId={userId}/>:<UsersListPage/>
 }
 export default Users

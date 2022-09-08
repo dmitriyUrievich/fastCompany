@@ -14,10 +14,8 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
     :options
 
   const handleChange = (value) => {
-    console.log('lolipup', value)
     onChange({ name, value })
   }
-
   return (
     <div className="mb-4">
       <label className="form-label">{label}</label>
