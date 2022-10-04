@@ -1,35 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-const SearchStatus = ({ number }) => {
-  if (number === 0) {
-    return (
-      <h3>
-        <span className="badge bg-danger">Никто с тобой не тусанет</span>
-      </h3>
-    )
+const SearchStatus = ({ length }) => {
+  const renderPhrase = (number) => {
+    const lastOne = Number(number.toString().slice(-1))
+    if (number > 4 && number < 15) {
+      return 'человек тусанет'
+    }
+    if (lastOne === 1) return 'человек тусанет'
+    if ([2, 3, 4].indexOf(lastOne) >= 0) return 'человека тусанут'
+    return 'человек тусанет'
   }
-
-  const lastNumber = number % 10
-  let count = ''
-
-  if (number >= 5 && number <= 20) {
-    count = `${number} человек тусанет`
-  } else if (lastNumber === 1 || lastNumber === 0) {
-    count = `${number} человек тусанет`
-  } else if (lastNumber === 2 || lastNumber === 3 || lastNumber === 4) {
-    count = `${number} человека тусанут`
-  } else {
-    count = `${number} человек тусанет`
-  }
-
   return (
-    <h3>
-      <span className="badge bg-primary">{count} с тобой сегодня</span>
-    </h3>
+    <h2>
+      <span
+        className={'badge ' + (length > 0 ? 'bg-primary' : 'bg-danger')}
+      >
+        {length > 0
+          ? `${length + ' ' + renderPhrase(length)}   с тобой сегодня`
+          : 'Никто с тобой не тусанет'}
+      </span>
+    </h2>
   )
 }
-
 SearchStatus.propTypes = {
-  number: PropTypes.number.isRequired
+  length: PropTypes.number
 }
+
 export default SearchStatus
