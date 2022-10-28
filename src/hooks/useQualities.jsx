@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react'
-import qualitiesService from '../services/qualities.service'
+import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
+import qualityService from '../services/quality.service'
 
 const QualitiesContext = React.createContext()
 
@@ -13,10 +13,11 @@ export const QualitiesProvider = ({ children }) => {
   const [qualities, setQualities] = useState([])
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(true)
+
   useEffect(() => {
     const getQualities = async() => {
       try {
-        const { content } = await qualitiesService.fetchAll()
+        const { content } = await qualityService.fetchAll()
         setQualities(content)
         setLoading(false)
       } catch (error) {
@@ -59,5 +60,3 @@ QualitiesProvider.propTypes = {
     PropTypes.node
   ])
 }
-
-export default QualitiesProvider
