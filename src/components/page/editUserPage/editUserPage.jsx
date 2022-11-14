@@ -8,8 +8,9 @@ import MultiSelectField from '../../common/form/multiSelectField'
 import BackHistoryButton from '../../common/backButton'
 import { useAuth } from '../../../hooks/useAuth'
 import { useUser } from '../../../hooks/useUsers'
-import { useQualities } from '../../../hooks/useQualities'
 import { useProfessions } from '../../../hooks/useProfession'
+import { getQualities, getQualitiesLoadingStatus } from '../../../store/qualities'
+import { useSelector } from 'react-redux'
 
 const EditUserPage = () => {
   const { updateUser } = useAuth()
@@ -19,8 +20,9 @@ const EditUserPage = () => {
 
   const history = useHistory()
   const [errors, setErrors] = useState({})
-  const { qualities, isLoadingQualities } = useQualities()
   const { professions, isLoadingProfession } = useProfessions()
+  const qualities = useSelector(getQualities())
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus())
 
   const qualitiesList = qualities.map((q) => ({
     label: q.name,
@@ -51,7 +53,6 @@ const EditUserPage = () => {
       qualities: data.qualities.map((q) => q.value)
     }
     try {
-      console.log(newData)
       await updateUser(user, newData)
       history.push(`/users/${userId}`)
     } catch (error) {
@@ -94,7 +95,7 @@ const EditUserPage = () => {
       <BackHistoryButton />
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
-          {!isLoadingQualities &&
+          {!qualitiesLoading &&
           !isLoadingProfession &&
           Object.keys(professions).length > 0
             ? (
