@@ -4,7 +4,6 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import userService from '../services/user.service'
 import localStorageService, {
-  getAccessToken,
   setTokens
 } from '../services/localStorage.service'
 import { useHistory } from 'react-router-dom'
@@ -64,6 +63,14 @@ const AuthProvider = ({ children }) => {
   function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
+  async function updateUserData(data) {
+    try {
+      const { content } = await userService.update(data)
+      setUser(content)
+    } catch (error) {
+      errorCatcher(error)
+    }
+  }
   async function signUp({ email, password, ...rest }) {
     try {
       const { data } = await httpAuth.post(`accounts:signUp`, {
@@ -106,23 +113,6 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       errorCatcher(error)
     }
-  } async function updateUser(oldUserData, userData) {
-    try {
-      if (userData.email !== oldUserData.email) {
-        const { data } = await httpAuth.post(`accounts:update`, {
-          idToken: getAccessToken(),
-          email: userData.email,
-          returnSecureToken: true
-        })
-        setTokens(data)
-      }
-
-      const { content } = await userService.update(userData)
-      console.log(content)
-      setUser(content)
-    } catch (error) {
-      errorCatcher(error)
-    }
   }
   function errorCatcher(error) {
     const { message } = error.response.data
@@ -152,7 +142,9 @@ const AuthProvider = ({ children }) => {
     }
   }, [error])
   return (
-    <AuthContext.Provider value={{ signUp, logIn, currentUser, logOut, updateUser }}>
+    <AuthContext.Provider
+      value={{ signUp, logIn, currentUser, logOut, updateUserData }}
+    >
       {!isLoading ? children : 'Loading...'}
     </AuthContext.Provider>
   )
